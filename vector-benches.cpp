@@ -74,6 +74,16 @@ void register_vector(GroupList& list) {
         m512 .template make<vector_load_load_lat_vmovdqu32_63_zmm>("vmovdqu-misaligned-zmm", "misaligned vmovdqu zmm load lat", 1);
     }
 
+    {
+        std::shared_ptr<BenchmarkGroup> group = std::make_shared<BenchmarkGroup>("vector/misc", "Miscellaneous vector benches");
+        list.push_back(group);
+
+        auto maker = DeltaMaker<TIMER>(group.get(), 100000).setFeatures({AVX2});
+        auto m512  = maker.setFeatures({AVX512F});
+
+        m512 .template make<vector_load_load_lat_vmovdqu32_63_zmm>("p01-fusion", "check that scalar ops go to p1", 1);
+    }
+
 #endif // #if !UARCH_BENCH_PORTABLE
 }
 
